@@ -292,45 +292,7 @@
             }
         }
 
-        // Check health on load
-        async function checkHealth() {
-            try {
-                const response = await fetch('/health');
-                
-                if (!response.ok) {
-                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
-                }
-                
-                const data = await response.json();
-                if (data.initialized) {
-                    showStatusBanner(
-                        `✓ RAG system is ready with ${data.documentsCount} documents. You can start asking questions!`,
-                        'info'
-                    );
-                    setTimeout(hideStatusBanner, 5000);
-                } else {
-                    showStatusBanner(
-                        '⚠ RAG system is not initialized. Please set RAG_WEBSITE_URL in your .env file and restart the server.',
-                        'warning'
-                    );
-                }
-            } catch (error) {
-                console.error('Health check failed:', error);
-                let errorMessage = '⚠ Unable to connect to server. ';
-                
-                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                    errorMessage += 'Make sure the server is running on http://localhost:3000. Run "npm start" in the terminal.';
-                } else if (error.message.includes('500')) {
-                    errorMessage += 'Server error. Check the server logs for details.';
-                } else {
-                    errorMessage += error.message;
-                }
-                
-                showStatusBanner(errorMessage, 'warning');
-            }
-        }
-
-        checkHealth();
+        // App is ready - user can start asking questions
     </script>
 </body>
 </html>
