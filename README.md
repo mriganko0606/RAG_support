@@ -111,9 +111,45 @@ The server includes all functionality from the original NestJS service:
 - **Vector DB**: In-memory storage with cosine similarity search
 - **LLM**: Uses Hugging Face router with Llama 3.1 8B Instruct model
 
+## Deployment
+
+### Deploy to Render (Recommended)
+
+1. Push your code to GitHub (already done!)
+2. Go to [Render Dashboard](https://dashboard.render.com)
+3. Click "New +" → "Web Service"
+4. Connect your GitHub repository: `https://github.com/mriganko0606/RAG_support.git`
+5. Configure:
+   - **Name**: `rag-support-chat` (or any name you prefer)
+   - **Environment**: `Node`
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Plan**: Free (or choose a paid plan)
+6. Add Environment Variables:
+   - `HF_TOKEN`: Your Hugging Face token
+   - `GEMINI_API_KEY`: Your Google Gemini API key
+   - `RAG_WEBSITE_URL`: Your website URLs (comma-separated)
+   - `PORT`: `10000` (Render uses port 10000, but server.js will auto-detect)
+7. Click "Create Web Service"
+8. Wait for deployment (first initialization may take 5-10 minutes)
+
+**Note**: Render will automatically detect `render.yaml` if present, making setup even easier!
+
+### Deploy to Vercel
+
+⚠️ **Warning**: Vercel uses serverless functions, which won't work well with this codebase as-is. The current implementation uses in-memory storage and long-running initialization processes that aren't suitable for serverless.
+
+For Vercel deployment, you would need to:
+- Restructure code into serverless functions
+- Use persistent storage (Vercel KV, database, etc.)
+- Handle initialization differently
+
+**Recommendation**: Use Render for this project.
+
 ## Notes
 
-- The vector database is in-memory, so data is lost on server restart
+- The vector database is in-memory, so data is lost on server restart (but auto-reinitializes)
 - Website scraping respects rate limits with 500ms delays between pages
 - Maximum 50 pages scraped per website to prevent infinite loops
 - Embeddings are generated in batches of 10 to avoid rate limits
+- First deployment/initialization may take several minutes depending on the number of URLs

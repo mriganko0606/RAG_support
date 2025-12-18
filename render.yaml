@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: rag-support-chat
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: HF_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: RAG_WEBSITE_URL
+        sync: false
+      - key: PORT
+        value: 10000
+    healthCheckPath: /health
+    plan: free
+
